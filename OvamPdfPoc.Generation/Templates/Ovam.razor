@@ -662,7 +662,7 @@
                                 </table>
                             </td>
                             <td class="input-dotted-large">@article.Value.EuralCode</td>
-                            <td class="input-dotted-large">@article.Value.TreatmentCode</td>
+                            <td class="input-dotted-large">@string.Join(", ", article.Value.TreatmentCode)</td>
                             <td>@article.Value.TreatmentType</td>
                         </tr>
                     }

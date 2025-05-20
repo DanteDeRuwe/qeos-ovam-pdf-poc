@@ -4,7 +4,7 @@ using OvamPdfPoc.Models.Models;
 
 namespace OvamPdfPoc.API.Fakers;
 
-public class FakeOvamIdentificationFormFactory
+public static class FakeOvamIdentificationFormFactory
 {
     public static OvamIdentificationForm Generate()
     {
@@ -31,13 +31,15 @@ public class FakeOvamIdentificationFormFactory
             .RuleFor(a => a.IdentificationNumber, companyIdNumbersFaker.Generate());
 
         var wasteFaker = new Faker<FormArticle>()
-            .RuleFor(a => a.Description, f => f.Commerce.ProductDescription())
-            .RuleFor(a => a.ChemicalComposition, f => f.Commerce.ProductMaterial())
-            .RuleFor(a => a.PackingMaterial, f => f.Commerce.ProductMaterial())
+            .RuleFor(a => a.Description, f => f.Commerce.Product())
+            .RuleFor(a => a.ChemicalComposition, f => f.Lorem.Sentence(1, 3))
+            .RuleFor(a => a.PhysicalProperties, f => f.Lorem.Sentence(1, 3))
+            .RuleFor(a => a.PackingMaterial, f => f.Lorem.Sentence(1, 3))
             .RuleFor(a => a.EuralCode, f => f.Random.AlphaNumeric(10))
-            .RuleFor(a => a.TreatmentType, f => f.Random.AlphaNumeric(10))
+            .RuleFor(a => a.TreatmentType, f => f.Lorem.Sentence(1, 3))
+            .RuleFor(a => a.TreatmentCode, f => Enumerable.Range(f.Random.Int(1, 5), f.Random.Int(1, 5)).Select(i => $"{f.PickRandom("R", "D")}{i}").ToArray())
             .RuleFor(a => a.PackingCount, f => f.Random.Number(1, 500))
-            .RuleFor(a => a.Weight, f => new FormArticleWeight { Quantity = f.Random.Float(), Unit = "kg" })
+            .RuleFor(a => a.Weight, f => new FormArticleWeight { Quantity = f.Random.Int(0, 999), Unit = "kg" })
             .RuleFor(a => a.WasteId, f => f.Random.Guid().ToString());
 
         var signatureFaker = new Faker<FormSignature>()
@@ -54,15 +56,15 @@ public class FakeOvamIdentificationFormFactory
                 });
 
 
-        return new OvamIdentificationForm()
+        return new OvamIdentificationForm
         {
             Id = $"SEOS-{faker.Random.Number(1, 100)}",
-            WasteProducer = new FormWasteProducer()
+            WasteProducer = new FormWasteProducer
             {
                 Name = faker.Company.CompanyName(),
                 Address = addressFaker.Generate(),
                 IdentificationNumber = faker.Random.Bool()
-                    ? new IdentificationNumbers()
+                    ? new IdentificationNumbers
                     {
                         Citizen = faker.Name.FullName()
                     }
@@ -73,27 +75,23 @@ public class FakeOvamIdentificationFormFactory
                     IdentificationNumber = companyIdNumbersFaker.Generate(),
                 }
             },
-            TreatmentFacility = new FormTreatmentFacility()
+            TreatmentFacility = new FormTreatmentFacility
             {
                 Name = faker.Company.CompanyName(),
                 Address = addressFaker.Generate(),
-                IdentificationNumber = faker.Random.Bool()
-                    ? new IdentificationNumbers()
-                    {
-                        Citizen = faker.Name.FullName()
-                    }
-                    : companyIdNumbersFaker.Generate()
+                IdentificationNumber = companyIdNumbersFaker.Generate()
             },
-            CollectorTraderBroker = new FormCollectorTraderBroker()
+            CollectorTraderBroker = new FormCollectorTraderBroker
             {
-                IdentificationNumber = companyIdNumbersFaker.Generate(),
+                Name = faker.Company.CompanyName(),
                 Address = addressFaker.Generate(),
-                Name = faker.Company.CompanyName()
+                IdentificationNumber = companyIdNumbersFaker.Generate()
             },
             Carriers =
                 carrierFaker.Generate(faker.Random.Int(1, 3))
                     .Select((x, i) => i == 0 ? x with { ExecutiveCarrier = true } : x) // Set first carrier as executive
                     .ToArray(),
+
             TransportDate = faker.Date.PastOffset(),
             Waste = wasteFaker.Generate(faker.Random.Int(1, 3)).ToArray(),
             SignatureReceiver = signatureFaker.Generate(),
