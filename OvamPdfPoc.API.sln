@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OvamPdfPoc.API", "OvamPdfPoc.API\OvamPdfPoc.API.csproj", "{6CBCD9BD-AF7A-4C5E-89BA-1779529AA784}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OvamPdfPoc.Rendering", "OvamPdfPoc.Rendering\OvamPdfPoc.Rendering.csproj", "{BD5D281A-1185-4972-95CE-CD0086E3459F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OvamPdfPoc.Generation", "OvamPdfPoc.Generation\OvamPdfPoc.Generation.csproj", "{BD5D281A-1185-4972-95CE-CD0086E3459F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OvamPdfPoc.Core", "OvamPdfPoc.Core\OvamPdfPoc.Core.csproj", "{43614653-8957-4931-81F9-7EEF83B92DE1}"
 EndProject

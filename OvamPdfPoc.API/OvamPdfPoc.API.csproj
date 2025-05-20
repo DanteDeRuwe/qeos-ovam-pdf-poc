@@ -14,7 +14,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\OvamPdfPoc.Core\OvamPdfPoc.Core.csproj" />
-      <ProjectReference Include="..\OvamPdfPoc.Rendering\OvamPdfPoc.Rendering.csproj" />
+      <ProjectReference Include="..\OvamPdfPoc.Generation\OvamPdfPoc.Generation.csproj" />
     </ItemGroup>
 
 </Project>

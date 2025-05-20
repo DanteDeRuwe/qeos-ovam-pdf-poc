@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using OvamPdfPoc.Models.Interfaces;
+using OvamPdfPoc.Templates.Converters;
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
 
@@ -11,7 +15,11 @@ public static class Bootstrap
     {
         services.AddSingleton<ITools, PdfTools>();
         services.AddScoped<IConverter, BasicConverter>();
-        services.AddScoped<PdfRenderService>();
+        services.AddScoped<HtmlToPdfConverter>();
+
+        services.AddScoped<HtmlRenderer>(sp => new HtmlRenderer(sp, sp.GetService<ILoggerFactory>() ?? new NullLoggerFactory()));
+        services.AddScoped<RazorToHtmlConverter>();
+
         services.AddScoped<IOvamPdfGenerator, OvamPdfGenerator>();
         return services;
     }

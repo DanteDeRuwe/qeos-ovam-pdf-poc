@@ -1,11 +1,11 @@
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
 
-namespace OvamPdfPoc.Templates;
+namespace OvamPdfPoc.Templates.Converters;
 
-public class PdfRenderService(IConverter pdfConverter)
+internal class HtmlToPdfConverter(IConverter inner)
 {
-    public byte[] Convert(string html, Orientation orientation, string headerPath = "", string footerPath = "", double? marginBottom = null)
+    internal byte[] RenderAsync(string html, Orientation orientation, string headerPath = "", string footerPath = "", double? marginBottom = null)
     {
         var pdfDocument = new HtmlToPdfDocument
         {
@@ -48,6 +48,6 @@ public class PdfRenderService(IConverter pdfConverter)
             }
         };
 
-        return pdfConverter.Convert(pdfDocument);
+        return inner.Convert(pdfDocument);
     }
 }
