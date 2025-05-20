@@ -1,0 +1,900 @@
+@using System.Runtime.InteropServices
+@using OvamPdfPoc.Models.Models
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ovam print</title>
+    <style>
+        * {
+            font-family: sans-serif !important;
+        }
+
+        .page-break-inside-avoid {
+            page-break-inside: avoid !important;
+            -webkit-region-break-inside: avoid !important;
+        }
+
+        .title {
+            border-bottom: 3px solid black;
+            width: 75%;
+        }
+
+        .input-solid {
+            border: 1px solid black;
+            height: 2rem;
+        }
+
+        .input-dotted {
+            border-bottom: 1px dotted black;
+            height: 2rem;
+        }
+
+        .input-dotted-large {
+            border-bottom: 1px dotted black;
+            min-height: 3rem;
+            height: auto;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .w-90 {
+            width: 90%;
+        }
+
+        .w-75 {
+            width: 75%;
+        }
+
+        .w-50 {
+            width: 50%;
+        }
+
+        .w-40 {
+            width: 40%;
+        }
+
+        .w-25 {
+            width: 25%;
+        }
+
+        .w-20 {
+            width: 20%;
+        }
+
+        .table-container {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .border-collapse-collapse {
+            border-collapse: collapse
+        }
+
+        .table-header {
+            border-bottom: 1px solid black;
+            border-top: 1px solid black;
+            padding: 0.5rem;
+            margin: 0 0.5rem;
+        }
+
+        .pl-5 {
+            padding-left: 5px;
+        }
+
+        .pr-10 {
+            padding-right: 10px;
+        }
+
+        .p-30 {
+            margin-top: 30px;
+        }
+
+        .py-1 {
+            padding: 0.5rem 0;
+        }
+
+        .my-2 {
+            margin: 2rem 0;
+        }
+
+        .section-title {
+            margin-top: 2rem;
+            background-color: grey;
+            color: white;
+            font-size: large;
+            padding: 0.5rem 0.25rem;
+            letter-spacing: 0.5px;
+        }
+
+        .label {
+            width: 25%;
+            text-align: end;
+            padding-right: 10px;
+        }
+
+        .text-start {
+            text-align: start;
+        }
+
+        .text-end {
+            text-align: end;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-bold {
+            font-weight: bold;
+        }
+
+        .vertical-align-bottom {
+            vertical-align: bottom;
+        }
+
+        .vertical-align-middle {
+            vertical-align: middle
+        }
+
+        .border-spacing-1 {
+            border-spacing: 1rem 0;
+        }
+
+        .legend {
+            display: -webkit-box;
+            -webkit-box-orient: horizontal;
+            -webkit-box-align: center;
+            flex-wrap: nowrap;
+            -webkit-box-pack: end;
+        }
+
+        .legend .text {
+            -webkit-box-flex: 0;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            flex-wrap: nowrap;
+            text-align: right;
+            -webkit-box-align: end;
+        }
+
+        .legend .text span {
+            text-align: right;
+            font-size: 12px;
+            display: -webkit-box;
+        }
+
+        .legend .icon {
+            -webkit-box-flex: 0;
+            padding: 0px 15px;
+        }
+
+        .legend .icon img {
+            height: 30px;
+            width: 30px;
+        }
+
+        .parent-fit {
+            text-align: center;
+            vertical-align: middle;
+            height: 100px;
+            border-style: inset;
+            padding: 2px;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .img-fit {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* Define styles for the note container */
+        .note {
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            padding: 2px;
+            margin: 2px;
+            border-radius: 5px;
+            box-shadow: 1px 1px 2px #ccc;
+        }
+    </style>
+</head>
+
+<body>
+<div>
+    <table class="w-full border-collapse-collapse">
+        <tr>
+            <td colspan="2">
+                <h1 class="title">Identificatieformulier van afvalstoffen</h1>
+            </td>
+        </tr>
+    </table>
+
+    <table class="w-full border-collapse-collapse">
+        <tr>
+            <td class="w-75 vertical-align-middle;"/> <!-- Empty tag to prevent full width references -->
+            <td class="w-25">
+                <table class="w-full border-collapse-collapse">
+                    <tr>
+                        <td>
+                            <span>uniek volgnummer</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="input-solid">@Model.Form.Id</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>datum vervoer</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="input-solid">@TimeZoneInfo.ConvertTimeFromUtc(Model.Form.TransportDate.UtcDateTime, LocalTimeZone).ToString("dd/MM/yyyy")</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <table class="w-full border-collapse-collapse p-30">
+        <tr>
+            <td>
+                Het identificatienummer van Belgische ondernemingen of vestigingen, is respectievelijk het
+                ondernemingsnummer of
+                vestigingsnummer, zoals toegekend in de Kruispuntbank voor ondernemingen. Voor buitenlandse
+                ondernemingen moet u het
+                BTW-nummer gebruiken, of, als geen BTW-nummer beschikbaar is, het EORI-nummer. Voor zeeschepen kan u
+                het IMO-
+                nummer of MMSI-nummer gebruiken.
+            </td>
+        </tr>
+    </table>
+
+    <div>
+        <!-- afvalstoffenproducent -->
+        <div class="page-break-inside-avoid">
+            <div class="w-full section-title text-start text-bold">
+                Identificatie van de afvalstoffenproducent
+            </div>
+            <table class="w-full">
+                <tr>
+                    <td class="label">naam</td>
+                    <td class="input-dotted pl-5 w-75">@Model.Form.WasteProducer.Name</td>
+                </tr>
+                <tr>
+                    <td class="label">straat en nummer</td>
+                    <td class="input-dotted pl-5 w-75">@Model.Form.WasteProducer.Address.Street, @Model.Form.WasteProducer.Address.HouseNumber @(string.IsNullOrWhiteSpace(Model.Form.WasteProducer.Address.MailboxNumber) is false ? "BP: " + @Model.Form.WasteProducer.Address.MailboxNumber : null)</td>
+                </tr>
+                <tr>
+                    <td class="w-25 text-end">postnummer en gemeente</td>
+                    <td class="w-75">
+                        <table class="w-full">
+                            <tr>
+                                <td class="w-75 pl-5 input-dotted">@Model.Form.WasteProducer.Address.PostalCode @Model.Form.WasteProducer.Address.Municipality</td>
+                                <td class="pl-5">land</td>
+                                <td class="pl-5 input-dotted">@Model.Form.WasteProducer.Address.Country</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">identificatienummer vestiging</td>
+                    <td class="input-dotted pl-5 w-75">
+
+
+                        @if (!string.IsNullOrEmpty(Model.Form.WasteProducer.IdentificationNumber.Citizen))
+                        {
+                            <text>
+                                Citizen
+                            </text>
+                        }
+                        else
+                        {
+                            @if (!string.IsNullOrWhiteSpace(Model.Form.WasteProducer.IdentificationNumber.EnterpriseNumber))
+                            {
+                                <text>
+                                    Ondernemingsnummer: @Model.Form.WasteProducer.IdentificationNumber.EnterpriseNumber
+                                </text>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(Model.Form.WasteProducer.IdentificationNumber.VatNumber))
+                            {
+                                <text>
+                                    BTW-nummer: @Model.Form.WasteProducer.IdentificationNumber.VatNumber
+                                </text>
+                            }
+
+                            // TODO?
+                            @* @if (!string.IsNullOrWhiteSpace(Model.Form.WasteProducer.EoriNumber)) *@
+                            @* { *@
+                            @*     <text> *@
+                            @*         Eori nr.: @Model.MissionOrder.Producer.Stakeholder.EoriNumber *@
+                            @*     </text> *@
+                            @* } *@
+
+                            @if (!string.IsNullOrWhiteSpace(Model.Form.WasteProducer.IdentificationNumber.EstablishmentUnitNumber))
+                            {
+                                <text>
+                                    Vestigingseenheidnummer: @Model.Form.WasteProducer.IdentificationNumber.EstablishmentUnitNumber
+                                </text>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(Model.Form.WasteProducer.IdentificationNumber.SeaShipMMSINumber))
+                            {
+                                <text>
+                                    MMSI nummer: @Model.Form.WasteProducer.IdentificationNumber.SeaShipMMSINumber
+                                </text>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(Model.Form.WasteProducer.IdentificationNumber.SeaShipIMONumber))
+                            {
+                                <text>
+                                    IMO nummer: @Model.Form.WasteProducer.IdentificationNumber.SeaShipIMONumber
+                                </text>
+                            }
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">adres van verzending</td>
+                    <td class="input-dotted pl-5 w-75">@Model.Form.WasteProducer.PickupLocation.Address.Street, @Model.Form.WasteProducer.PickupLocation.Address.HouseNumber @(!string.IsNullOrWhiteSpace(Model.Form.WasteProducer.PickupLocation.Address.MailboxNumber) ? "BP: " + Model.Form.WasteProducer.PickupLocation.Address.MailboxNumber : null) </td>
+                </tr>
+                <tr>
+                    <td class="w-25 text-end"></td>
+                    <td class="input-dotted pl-5 w-75">@Model.Form.WasteProducer.PickupLocation.Address.PostalCode @Model.Form.WasteProducer.PickupLocation.Address.Municipality (@Model.Form.WasteProducer.PickupLocation.Address.Country)</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- makelaar -->
+        <div class="page-break-inside-avoid">
+            <div class="w-full section-title text-start text-bold">
+                Identificatie van de inzamelaar, afvalstoffenhandelaar of -makelaar
+            </div>
+            <div class="w-full text-start py-1">
+                U hoeft deze rubriek niet in te vullen als de afvalstoffenproducent zelf regelingen treft.
+            </div>
+            <table class="w-full">
+                <tr>
+                    <td class="label">naam</td>
+                    <td class="input-dotted pl-5 w-75">
+                        @* TODO *@
+                        @* @if (Model.Form.CollectorTraderBroker?.Id != Model.Form.WasteProducer.DossierId) *@
+                        @* { *@
+                        <text>@Model.Form.CollectorTraderBroker?.Name</text>
+                        @* } *@
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">straat en nummer</td>
+                    <td class="input-dotted pl-5 w-75">
+                        @* TODO *@
+                        @* @if (Model.Form.CollectorTraderBroker?.Id != Model.Form.WasteProducer.DossierId) *@
+                        @* { *@
+                        <text>@Model.Form.CollectorTraderBroker?.Address.Street, @Model.Form.CollectorTraderBroker?.Address.HouseNumber @(!string.IsNullOrWhiteSpace(Model.Form.CollectorTraderBroker?.Address.MailboxNumber) ? "BP: " + Model.Form.CollectorTraderBroker?.Address.MailboxNumber : null) </text>
+                        @* } *@
+                    </td>
+                </tr>
+                <tr>
+                    <td class="w-25 text-end">postnummer en gemeente</td>
+                    <td class="w-75">
+                        <table class="w-full">
+                            <tr>
+                                <td class="w-75 pl-5 input-dotted">
+                                    @* TODO *@
+                                    @* @if (Model.Form.CollectorTraderBroker?.Id != Model.Form.WasteProducer.DossierId) *@
+                                    @* { *@
+                                    <text>@Model.Form.CollectorTraderBroker?.Address.PostalCode @Model.Form.CollectorTraderBroker?.Address.Municipality</text>
+                                    @* } *@
+                                </td>
+                                <td class="pl-5">land</td>
+                                <td class="input-dotted pl-5">
+                                    @* TODO *@
+                                    @* @if (Model.Form.CollectorTraderBroker?.Id != Model.Form.WasteProducer.DossierId) *@
+                                    @* { *@
+                                    <text>@Model.Form.CollectorTraderBroker?.Address.Country</text>
+                                    @* } *@
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">identificatienummer onderneming</td>
+                    <td class="input-dotted pl-5 w-75">
+                        @* TODO *@
+                        @* @if (Model.Form.CollectorTraderBroker?.Id != Model.Form.WasteProducer.DossierId) *@
+                        @* { *@
+                        @if (!string.IsNullOrWhiteSpace(Model.Form.CollectorTraderBroker?.IdentificationNumber.EnterpriseNumber))
+                        {
+                            <text>
+                                Ondernemingsnummer: @Model.Form.CollectorTraderBroker?.IdentificationNumber.EnterpriseNumber
+                            </text>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Form.CollectorTraderBroker?.IdentificationNumber.VatNumber))
+                        {
+                            <text>
+                                BTW-nummer: @Model.Form.CollectorTraderBroker?.IdentificationNumber.VatNumber
+                            </text>
+                        }
+
+                        @* TODO? *@
+                        @* @if (!string.IsNullOrWhiteSpace(Model.Form.CollectorTraderBroker?.EoriNumber)) *@
+                        @* { *@
+                        @*     <text> *@
+                        @*         Eori nr.: @Model.MissionOrder.Producer.Stakeholder.EoriNumber *@
+                        @*     </text> *@
+                        @* } *@
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Form.CollectorTraderBroker?.IdentificationNumber.EstablishmentUnitNumber))
+                        {
+                            <text>
+                                Vestigingseenheidnummer: @Model.Form.CollectorTraderBroker?.IdentificationNumber.EstablishmentUnitNumber
+                            </text>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Form.CollectorTraderBroker?.IdentificationNumber.SeaShipMMSINumber))
+                        {
+                            <text>
+                                MMSI nummer: @Model.Form.CollectorTraderBroker?.IdentificationNumber.SeaShipMMSINumber
+                            </text>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Form.CollectorTraderBroker?.IdentificationNumber.SeaShipIMONumber))
+                        {
+                            <text>
+                                IMO nummer: @Model.Form.CollectorTraderBroker?.IdentificationNumber.SeaShipIMONumber
+                            </text>
+                        }
+                        @* } *@
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- vervoerder -->
+
+        @{
+            var executiveCarrier = Model.Form.Carriers.FirstOrDefault(x => x.ExecutiveCarrier);
+        }
+        <div class="page-break-inside-avoid">
+            <div class="w-full section-title text-start text-bold">
+                Identificatie van de vervoerder
+            </div>
+            <table class="w-full">
+                <tr>
+                    <td class="label">naam</td>
+                    <td class="input-dotted pl-5 w-75">@executiveCarrier.Name</td>
+                </tr>
+                <tr>
+                    <td class="label">straat en nummer</td>
+                    <td class="input-dotted pl-5 w-75">@executiveCarrier?.Address.Street, @executiveCarrier?.Address.HouseNumber @(string.IsNullOrWhiteSpace(executiveCarrier?.Address.MailboxNumber) is false ? "BP: " + executiveCarrier?.Address.MailboxNumber : null)</td>
+                </tr>
+                <tr>
+                    <td class="w-25 text-end">postnummer en gemeente</td>
+                    <td class="w-75">
+                        <table class="w-full">
+                            <tr>
+                                <td class="w-75 pl-5 input-dotted">@executiveCarrier?.Address.PostalCode @executiveCarrier?.Address.Municipality</td>
+                                <td class="pl-5">land</td>
+                                <td class="input-dotted pl-5">@executiveCarrier?.Address.Country</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">identificatienummer onderneming</td>
+                    <td class="input-dotted pl-5 w-75">
+                        @* TODO *@
+                        @* @if (Model.Form.CollectorTraderBroker?.Id != Model.Form.WasteProducer.DossierId) *@
+                        @* { *@
+                        @if (!string.IsNullOrWhiteSpace(executiveCarrier.IdentificationNumber.EnterpriseNumber))
+                        {
+                            <text>
+                                Ondernemingsnummer: @executiveCarrier.IdentificationNumber.EnterpriseNumber
+                            </text>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(executiveCarrier.IdentificationNumber.VatNumber))
+                        {
+                            <text>
+                                BTW-nummer: @executiveCarrier.IdentificationNumber.VatNumber
+                            </text>
+                        }
+
+                        @* TODO? *@
+                        @* @if (!string.IsNullOrWhiteSpace(executiveCarrier.EoriNumber)) *@
+                        @* { *@
+                        @*     <text> *@
+                        @*         Eori nr.: @Model.MissionOrder.Producer.Stakeholder.EoriNumber *@
+                        @*     </text> *@
+                        @* } *@
+
+                        @if (!string.IsNullOrWhiteSpace(executiveCarrier.IdentificationNumber.EstablishmentUnitNumber))
+                        {
+                            <text>
+                                Vestigingseenheidnummer: @executiveCarrier.IdentificationNumber.EstablishmentUnitNumber
+                            </text>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(executiveCarrier.IdentificationNumber.SeaShipMMSINumber))
+                        {
+                            <text>
+                                MMSI nummer: @executiveCarrier.IdentificationNumber.SeaShipMMSINumber
+                            </text>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(executiveCarrier.IdentificationNumber.SeaShipIMONumber))
+                        {
+                            <text>
+                                IMO nummer: @executiveCarrier.IdentificationNumber.SeaShipIMONumber
+                            </text>
+                        }
+                        @* } *@
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- verwerker -->
+        @{
+            var treatmentFacility = Model.Form.TreatmentFacility;
+        }
+        <div class="page-break-inside-avoid">
+            <div class="w-full section-title text-start text-bold">
+                Identificatie van de verwerker
+            </div>
+            <table class="w-full">
+                <tr>
+                    <td class="label">naam</td>
+                    <td class="input-dotted pl-5 w-75">@treatmentFacility.Name</td>
+                </tr>
+                <tr>
+                    <td class="label">straat en nummer</td>
+                    <td class="input-dotted pl-5 w-75">@treatmentFacility.Address.Street, @treatmentFacility.Address.HouseNumber @(string.IsNullOrWhiteSpace(treatmentFacility.Address.MailboxNumber) is false ? "BP: " + @treatmentFacility.Address.MailboxNumber : null)</td>
+                </tr>
+                <tr>
+                    <td class="w-25 text-end">postnummer en gemeente</td>
+                    <td class="w-75">
+                        <table class="w-full">
+                            <tr>
+                                <td class="w-75 pl-5 input-dotted">@treatmentFacility.Address.PostalCode @treatmentFacility.Address.Municipality</td>
+                                <td class="pl-5">land</td>
+                                <td class="input-dotted pl-5">@treatmentFacility.Address.Country</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">identificatienummer vestiging</td>
+                    <td class="input-dotted pl-5 w-75">
+                        @* TODO *@
+                        @* @if (Model.Form.CollectorTraderBroker?.Id != Model.Form.WasteProducer.DossierId) *@
+                        @* { *@
+                        @if (!string.IsNullOrWhiteSpace(treatmentFacility.IdentificationNumber.EnterpriseNumber))
+                        {
+                            <text>
+                                Ondernemingsnummer: @treatmentFacility.IdentificationNumber.EnterpriseNumber
+                            </text>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(treatmentFacility.IdentificationNumber.VatNumber))
+                        {
+                            <text>
+                                BTW-nummer: @treatmentFacility.IdentificationNumber.VatNumber
+                            </text>
+                        }
+
+                        @* TODO? *@
+                        @* @if (!string.IsNullOrWhiteSpace(treatmentFacility.EoriNumber)) *@
+                        @* { *@
+                        @*     <text> *@
+                        @*         Eori nr.: @Model.MissionOrder.Producer.Stakeholder.EoriNumber *@
+                        @*     </text> *@
+                        @* } *@
+
+                        @if (!string.IsNullOrWhiteSpace(treatmentFacility.IdentificationNumber.EstablishmentUnitNumber))
+                        {
+                            <text>
+                                Vestigingseenheidnummer: @treatmentFacility.IdentificationNumber.EstablishmentUnitNumber
+                            </text>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(treatmentFacility.IdentificationNumber.SeaShipMMSINumber))
+                        {
+                            <text>
+                                MMSI nummer: @treatmentFacility.IdentificationNumber.SeaShipMMSINumber
+                            </text>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(treatmentFacility.IdentificationNumber.SeaShipIMONumber))
+                        {
+                            <text>
+                                IMO nummer: @treatmentFacility.IdentificationNumber.SeaShipIMONumber
+                            </text>
+                        }
+                        @* } *@
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="page-break-inside-avoid my-2">
+            <div class="w-full section-title text-start text-bold">
+                Identificatie van de afvalstoffen
+            </div>
+            <div class="w-full py-1">
+                <table class="w-full border-spacing-1">
+                    <tr>
+                        <th class="table-header">Nr</th>
+                        <th class="table-header">omschrijving</th>
+                        <th class="table-header">hoeveelheid</th>
+                        <th class="table-header">EURAL-code</th>
+                        <th class="table-header">Aard van verwerking (R- of D-code)</th>
+                        <th class="table-header">Verwerkings-techniek</th>
+                    </tr>
+                    @foreach (var article in Model.Form.Waste.Select((value, index) => new { Value = value, Index = index + 1 }))
+                    {
+                        <tr>
+                            <td class="text-center">@article.Index.ToString()</td>
+                            <td class="input-dotted-large">@article.Value.Description</td>
+                            <td>
+                                <table class="w-full">
+                                    <tr>
+                                        <td class="w-90 input-dotted-large">
+                                            @article.Value.Weight.Quantity
+                                        </td>
+                                        <td class="vertical-align-bottom">
+                                            <span>@article.Value.Weight.Unit</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="input-dotted-large">@article.Value.EuralCode</td>
+                            <td class="input-dotted-large">@article.Value.TreatmentCode</td>
+                            <td>@article.Value.TreatmentType</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="page-break-inside-avoid my-2">
+            <div class="w-full section-title text-start text-bold">
+                Speciale instructies voor het transport (indien van toepassing)
+            </div>
+            <div>
+                @* TODO *@
+                @* <div class="input-dotted">@Model.MissionOrder.CollectionComments</div> *@
+                @* <div class="input-dotted">@Model.MissionOrder.DeliveryComments</div> *@
+            </div>
+        </div>
+        <div class="page-break-inside-avoid my-2">
+            <div class="w-full section-title text-start text-bold">
+                Fysische eigenschappen, chemische samenstelling en verpakking van de afvalstof
+            </div>
+            <div class="py-1">
+                Geef hieronder een beschrijving van de fysische eigenschappen, chemische samenstelling, het
+                verpakkingstype
+                en het aantal verpakkingen van de <span class="text-bold">gevaarlijke afvalstoffen</span>.
+            </div>
+            <div>
+                <table class="w-full border-spacing-1">
+                    <tr>
+                        <th class="table-header">Nr</th>
+                        <th class="table-header">fysische eigenschappen</th>
+                        <th class="table-header">chemische samenstelling</th>
+                        <th class="table-header">Verpakkingstype</th>
+                        <th class="table-header">Aantal verpakkingen</th>
+                    </tr>
+                    @foreach (var article in Model.Form.Waste.Select((value, index) => new { Value = value, Index = index + 1 }))
+                    {
+                        @if (article.Value.PhysicalProperties is not null || article.Value.ChemicalComposition is not null || article.Value.PackingMaterial is not null)
+                        {
+                            <tr>
+                                <td class="text-center">@article.Index</td>
+                                <td class="input-dotted-large">@article.Value.PhysicalProperties</td>
+                                <td class="input-dotted-large">@article.Value.ChemicalComposition</td>
+                                <td class="input-dotted-large">@article.Value.PackingMaterial</td>
+                                <td class="input-dotted-large">@article.Value.PackingCount</td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="page-break-inside-avoid my-2">
+            <div class="w-full section-title text-start text-bold">
+                Geolocatie in Lambert2008 coördinatenstelsel
+            </div>
+            <table class="w-full">
+                <tr>
+                    <td class="w-50">
+                        <table class="w-full">
+                            <tr>
+                                <td class="vertical-align-bottom">locatie start afvaltransport</td>
+                                <td class="w-75">
+                                    <div class="input-dotted">
+                                        @{
+                                            var (latResponsible, lonResponsible) = Model.Form.SignatureResponsible.SignedAtLocation?.Coordinates is [string latRes, string lonRes] ? (latRes.Replace(',', '.'), lonRes.Replace(',', '.')) : (null, null);
+                                        }
+
+                                        @(!string.IsNullOrEmpty(latResponsible) ? $"X:{latResponsible}" : string.Empty), @(!string.IsNullOrEmpty(lonResponsible) ? $"Y:{lonResponsible}" : string.Empty)
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="w-50">
+                        <table class="w-full">
+                            <tr>
+                                <td class="text-end vertical-align-bottom">locatie afgifte afvaltransport</td>
+                                <td class="w-75">
+                                    <div class="input-dotted">
+                                        @{
+                                            var (latReceiver, lonReceiver) = Model.Form.SignatureReceiver.SignedAtLocation?.Coordinates is [string latRec, string lonRec] ? (latRec.Replace(',', '.'), lonRec.Replace(',', '.')) : (null, null);
+                                        }
+
+                                        @(!string.IsNullOrEmpty(latReceiver) ? $"X:{latReceiver}" : string.Empty), @(!string.IsNullOrEmpty(lonReceiver) ? $"Y:{lonReceiver}" : string.Empty)
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="page-break-inside-avoid my-2">
+            <div class="w-full section-title text-start text-bold">
+                Ondertekening
+            </div>
+            <div class="py-1">
+                <table class="w-full border-spacing-1">
+                    <tr class="w-full">
+                        <th class="w-20"></th>
+                        <th class="table-header w-40 text-start">
+                            inzamelaar, afvalstoffenhandelaar of makelaar of
+                            afvalstoffenproducent die zelf regelingen treft
+                        </th>
+                        <th class="table-header w-40">verwerker</th>
+                    </tr>
+                    <tr class="w-full">
+                        <td class="w-20">datum en tijdstip handtekening</td>
+                        <td class="input-dotted w-40">
+                            @if (Model.Form.SignatureResponsible.Date > DateTimeOffset.MinValue)
+                            {
+                                @TimeZoneInfo.ConvertTimeFromUtc(Model.Form.SignatureResponsible.Date.UtcDateTime, LocalTimeZone).ToString("dd/MM/yyyy HH:mm")
+                            }
+                        </td>
+                        <td class="input-dotted w-40">
+                            @if (Model.Form.SignatureReceiver.Date > DateTimeOffset.MinValue)
+                            {
+                                @TimeZoneInfo.ConvertTimeFromUtc(Model.Form.SignatureReceiver.Date.UtcDateTime, LocalTimeZone).ToString("dd/MM/yyyy HH:mm")
+                            }
+                        </td>
+                    </tr>
+                    <tr class="w-full">
+                        <td class="w-20">voor- en achternaam</td>
+                        <td class="input-dotted w-40">@Model.Form.SignatureResponsible.Name</td>
+                        <td class="input-dotted w-40">@Model.Form.SignatureReceiver.Name</td>
+                    </tr>
+                    <tr class="w-full">
+                        <td class="w-20">handtekening</td>
+                        <td class="input-dotted w-40 parent-fit">
+                            <div class="image-container">
+                                @* TODO *@
+                                @* <img class="img-fit" src="data:image/png;base64,@Model.Form.SignatureResponsible?.Image"/> *@
+                            </div>
+                        </td>
+                        <td class="input-dotted w-40 parent-fit">
+                            <div class="image-container">
+                                @* TODO *@
+                                @* <img class="img-fit" src="data:image/png;base64,@Model.Form.SignatureReceiver?.Image"/> *@
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr class="w-full">
+                        <td class="w-20"></td>
+                        <td class="w-40">
+                            @* TODO *@
+                            @* <img class="img-fit" *@
+                            @*      src="data:image/png;base64,@GenerateQrCode(@Model.Path, @Model.MissionOrder.Id)" *@
+                            @*      alt="QR Code" width="200" height="200"/> *@
+                        </td>
+                        @* TODO *@
+                        @* @if (@Model.Form.SignatureReceiver?.Image is not null) *@
+                        @* { *@
+                        @*     <td class="w-40 note"> *@
+                        @*         <small class="note-content">de bestemmeling, behoudens een bericht aan diegene die de regelingen voor het afvaltransport heeft getroffen (de inzamelaar, afvalstoffenhandelaar of-makelaar, of de producent die zelf regelingen heeft getroffen voor zijn afvalstoffen), de ontvangst van de afvalstoffen bevestigt.</small> *@
+                        @*     </td> *@
+                        @* } *@
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="page-break-inside-avoid my-2">
+            <div class="w-full section-title text-start text-bold">
+                Geschiedenis van wijzigingen
+            </div>
+            <div class="py-1">
+                Wijzigingen die in het document worden aangebracht wanneer het voor het eerst wordt ondertekend.
+            </div>
+            <div>
+                <table class="w-full border-spacing-1">
+                    <tr>
+                        <th class="table-header">Auteur</th>
+                        <th class="table-header">Datum</th>
+                        <th class="table-header">Beschrijving</th>
+                        <th class="table-header">Oude waarde</th>
+                        <th class="table-header">Nieuwe waarde</th>
+                    </tr>
+                    @* TODO *@
+                    @* @foreach (var history in Model.MissionOrder.MissionOrderHistories) *@
+                    @* { *@
+                    @*     <tr> *@
+                    @*         <td class="input-dotted-large"> *@
+                    @*             @history.ModifiedBy *@
+                    @*         </td> *@
+                    @*         <td class="input-dotted-large"> *@
+                    @*             @TimeZoneInfo.ConvertTimeFromUtc(history.ModifiedOn, LocalTimeZone).ToString("dd/MM/yyyy HH:mm") *@
+                    @*         </td> *@
+                    @*         <td class="input-dotted-large"> *@
+                    @*             @history.Description *@
+                    @*         </td> *@
+                    @*         <td class="input-dotted-large"> *@
+                    @*             @history.OldValue *@
+                    @*         </td> *@
+                    @*         <td class="input-dotted-large"> *@
+                    @*             @history.NewValue *@
+                    @*         </td> *@
+                    @*     </tr> *@
+                    @* } *@
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <footer>
+        <div class="legend">
+            <div class="text">
+                <span>Conception and design by QEOS</span>
+                <span>Specialized in developing flexible time registration solutions</span>
+            </div>
+            <div class="icon">
+                <img src="https://qeosstoragetest.blob.core.windows.net/assets/logo/qeos.png" alt="QEOS"/>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+
+</html>
+
+
+@code{
+
+    [Parameter] public OvamPdfModel Model { get; set; }
+
+    public static readonly TimeZoneInfo LocalTimeZone = TimeZoneInfo.FindSystemTimeZoneById(LocalTimezoneString);
+
+    private static string LocalTimezoneString => true switch
+    {
+        _ when RuntimeInformation.IsOSPlatform(OSPlatform.Windows) => "Romance Standard Time",
+        _ when RuntimeInformation.IsOSPlatform(OSPlatform.OSX) => "Europe/Brussels",
+        _ when RuntimeInformation.IsOSPlatform(OSPlatform.Linux) => "Europe/Brussels",
+        _ => throw new PlatformNotSupportedException("OS platform is not supported.")
+    };
+
+}

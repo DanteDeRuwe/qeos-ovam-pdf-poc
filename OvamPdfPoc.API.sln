@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OvamPdfPoc.API", "OvamPdfPoc.API\OvamPdfPoc.API.csproj", "{6CBCD9BD-AF7A-4C5E-89BA-1779529AA784}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OvamPdfPoc.Rendering", "OvamPdfPoc.Rendering\OvamPdfPoc.Rendering.csproj", "{BD5D281A-1185-4972-95CE-CD0086E3459F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OvamPdfPoc.Core", "OvamPdfPoc.Core\OvamPdfPoc.Core.csproj", "{43614653-8957-4931-81F9-7EEF83B92DE1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CBCD9BD-AF7A-4C5E-89BA-1779529AA784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CBCD9BD-AF7A-4C5E-89BA-1779529AA784}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CBCD9BD-AF7A-4C5E-89BA-1779529AA784}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CBCD9BD-AF7A-4C5E-89BA-1779529AA784}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD5D281A-1185-4972-95CE-CD0086E3459F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD5D281A-1185-4972-95CE-CD0086E3459F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD5D281A-1185-4972-95CE-CD0086E3459F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD5D281A-1185-4972-95CE-CD0086E3459F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43614653-8957-4931-81F9-7EEF83B92DE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43614653-8957-4931-81F9-7EEF83B92DE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43614653-8957-4931-81F9-7EEF83B92DE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43614653-8957-4931-81F9-7EEF83B92DE1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
